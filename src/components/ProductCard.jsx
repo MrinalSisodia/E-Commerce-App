@@ -11,7 +11,7 @@ const ProductCard = ({ product, renderActions, variant = "grid" }) => {
 
   return (
     <div className={`card product-card position-relative shadow-sm`}>
-      {/* Wishlist Button */}
+   
       <button
         className="btn position-absolute top-0 end-0 m-2"
         onClick={(e) => {
@@ -26,7 +26,7 @@ const ProductCard = ({ product, renderActions, variant = "grid" }) => {
         ></i>
       </button>
 
-      {/* Image Section */}
+   
       {isCart ? (
         <div className="text-center">
           <img
@@ -47,7 +47,7 @@ const ProductCard = ({ product, renderActions, variant = "grid" }) => {
         </div>
       )}
 
-      {/* Card Body */}
+
       <div className={`card-body d-flex flex-column justify-content-between ${isCart ? "cart-card-body" : ""}`}>
         <div>
           <h6 className="card-title text-truncate fw-semibold">{product.name}</h6>

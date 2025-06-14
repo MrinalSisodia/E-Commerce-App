@@ -21,7 +21,6 @@ const handleSearchClick = () => {
     setSearchQuery(e.target.value);
   };
 
-  // 🚨 Clear search when navigating to any other page
   useEffect(() => {
     if (location.pathname !== "/search") {
       setSearchQuery("");

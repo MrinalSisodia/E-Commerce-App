@@ -16,12 +16,12 @@ const ProductList = () => {
     <div className="container-fluid py-4">
       <h2 className="mb-4 text-capitalize">{category} Products</h2>
       <div className="row">
-        {/* Sidebar */}
+
         <div className="col-md-3">
           <FiltersSidebar />
         </div>
 
-        {/* Product Grid */}
+    
         <div className="col-md-9">
           {categoryLoading ? (
             <p className="text-muted">Loading products...</p>

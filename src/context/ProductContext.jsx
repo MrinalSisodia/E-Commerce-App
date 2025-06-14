@@ -18,7 +18,7 @@ export const ProductProvider = ({ children }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [triggerSearch, setTriggerSearch] = useState(false);
 
-  // ✅ Fetch all products once for global search
+
   const fetchAllProducts = async () => {
     try {
       const res = await fetch("https://major-project-1-theta.vercel.app/products/all");
@@ -30,7 +30,7 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  // ✅ Fetch category-specific products
+
   const fetchCategoryProducts = async (category) => {
     try {
       setCategoryLoading(true);
@@ -51,7 +51,6 @@ export const ProductProvider = ({ children }) => {
     }
   };
 
-  // ✅ Fetch search results from backend
   const fetchSearchResults = async (query) => {
     try {
       const res = await fetch(`https://major-project-1-theta.vercel.app/products/by-name/${query}`);

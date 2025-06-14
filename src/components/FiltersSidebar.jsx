@@ -17,7 +17,6 @@ const FiltersSidebar = () => {
 
    return (
     <div className="border p-3 rounded">
-      {/* Filters Header + Clear Filters */}
       <div className="d-flex justify-content-between align-items-center mb-3">
         <h5 className="mb-0">Filters</h5>
         <button className="btn btn-sm btn-outline-secondary" onClick={clearFilters}>
@@ -27,7 +26,6 @@ const FiltersSidebar = () => {
 
      
 
-      {/* Subcategory */}
       <div className="mb-3">
         <label className="form-label fw-semibold">Subcategory</label>
         <div className="d-flex flex-column">
@@ -62,8 +60,6 @@ const FiltersSidebar = () => {
         </div>
       </div>
 
-      {/* Rating */}
-      {/* Rating Slider */}
 <div className="mb-3">
   <label className="form-label fw-semibold">
     Rating: {rating} ⭐ & above
@@ -80,7 +76,7 @@ const FiltersSidebar = () => {
 </div>
 
 
-    {/* Price */}
+
       <div className="mb-3">
         <label className="form-label fw-semibold">Price: ${maxPrice}</label>
         <input
@@ -94,7 +90,7 @@ const FiltersSidebar = () => {
         />
       </div>
 
-      {/* Sort By Price */}
+
       <div className="mb-3">
         <label className="form-label fw-semibold">Sort by Price</label>
         <div className="form-check">

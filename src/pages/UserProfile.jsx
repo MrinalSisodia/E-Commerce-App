@@ -10,7 +10,6 @@ const addressFields = [
   { name: "zip", type: "number", placeholder: "ZIP Code" }
 ];
 
-// 🔁 Utility to get empty address object
 const getEmptyAddress = () =>
   Object.fromEntries(addressFields.map(({ name }) => [name, ""]));
 
