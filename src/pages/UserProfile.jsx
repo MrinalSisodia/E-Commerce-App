@@ -40,11 +40,9 @@ const handleAddAddress = () => {
     return;
   }
 
-  // Add and immediately clear
   const success = addAddress({ ...newAddress });
   if (success) {
-    setNewAddress(getEmptyAddress()); // 🧼 Clear form
-    console.log("Address cleared", getEmptyAddress());
+    setNewAddress(getEmptyAddress()); 
   }
 };
 

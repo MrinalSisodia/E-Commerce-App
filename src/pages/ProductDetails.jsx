@@ -12,7 +12,6 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // ✅ Fetch the product from backend using productId
   useEffect(() => {
     const fetchProduct = async () => {
       try {

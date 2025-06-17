@@ -19,17 +19,13 @@ export const CartProvider = ({ children }) => {
   };
 
   const updateQuantity = (productId, newQuantity) => {
-    if (newQuantity <= 0) {
-      setCart(prevCart => prevCart.filter(item => item._id !== productId));
-      toast.info("Removed from cart");
-    } else {
+
       setCart(prevCart =>
         prevCart.map(item =>
           item._id === productId ? { ...item, quantity: newQuantity } : item
         )
       );
       toast.success("Product quantity updated!");
-    }
   };
 
   const removeFromCart = (productId) => {

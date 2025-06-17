@@ -13,7 +13,6 @@ export const OrderProvider = ({ children }) => {
     localStorage.setItem("orders", JSON.stringify(orders));
   }, [orders]);
 
-  // Place a new order
   const placeOrder = (cartItems, address) => {
     const newOrder = {
       id: Date.now().toString(),
@@ -32,5 +31,5 @@ export const OrderProvider = ({ children }) => {
   );
 };
 
-// Hook to use order context
+
 export const useOrderContext = () => useContext(OrderContext);

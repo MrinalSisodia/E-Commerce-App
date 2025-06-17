@@ -26,8 +26,7 @@ export const AddressProvider = ({ children }) => {
  const addAddress = (address) => {
   const newAddress = { ...address, id: Date.now().toString() };
   setAddresses((prev) => [...prev, newAddress]);
-  console.log("newAddress state", newAddress);
-  return true; // Indicate successful addition
+  return true; 
 };
 
 
