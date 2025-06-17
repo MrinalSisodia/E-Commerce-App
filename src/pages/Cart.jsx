@@ -17,13 +17,15 @@ const Cart = () => {
 
       {cart.length > 0 ? (
         <>
-          <div className="d-flex flex-column gap-4">
-            {cart.map((item) => (
-              <CartItemCard key={item._id} item={item} />
-            ))}
-          </div>
+         <div className="row g-4">
+  {cart.map((item) => (
+    <div key={item._id} className="col-12 col-md-6">
+      <CartItemCard item={item} />
+    </div>
+  ))}
+</div>
 
-          <div className="card p-3 mt-5">
+          <div className="card col-md-6 p-3 mt-5">
             <h4>Cart Summary</h4>
             <hr />
             <p>

@@ -7,7 +7,7 @@ const CartItemCard = ({ item }) => {
   const { isInWishlist, toggleWishlist } = useWishlistContext();
 
   return (
-    <div className="cart-horizontal-card shadow-sm">
+    <div className="cart-horizontal-card">
       <div className="cart-image-section">
         <img
           src={item.imageUrl}
@@ -15,18 +15,18 @@ const CartItemCard = ({ item }) => {
           className="cart-horizontal-img"
         />
       </div>
+
       <div className="cart-details-section d-flex flex-column justify-content-between">
         <div>
           <h5 className="fw-semibold">{item.name}</h5>
-          <p className="text-muted mb-1">${item.price}</p>
+          <p className="text-muted mb-2">${item.price}</p>
         </div>
 
-        <div className="d-flex align-items-center gap-2 mb-2">
+        <div className="d-flex align-items-center gap-2 mb-2 flex-wrap">
           <button
-            className="btn btn-outline-secondary"
+            className="btn btn-outline-secondary btn-sm"
             onClick={() =>
-              item.quantity > 1 &&
-              updateQuantity(item._id, item.quantity - 1)
+              item.quantity > 1 && updateQuantity(item._id, item.quantity - 1)
             }
             disabled={item.quantity <= 1}
           >
@@ -34,14 +34,14 @@ const CartItemCard = ({ item }) => {
           </button>
           <span>{item.quantity}</span>
           <button
-            className="btn btn-outline-secondary"
+            className="btn btn-outline-secondary btn-sm"
             onClick={() => updateQuantity(item._id, item.quantity + 1)}
           >
             +
           </button>
         </div>
 
-        <div className="d-flex flex-wrap gap-2">
+        <div className="cart-button-group">
           <button
             className="btn btn-sm btn-outline-primary"
             onClick={() => {

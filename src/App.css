@@ -66,23 +66,74 @@ main {
   border-radius: 8px;
   overflow: hidden;
   background-color: #fff;
-  height: 220px;
+  height: 240px;
+  min-height: 240px;
+  max-height: 240px;
 }
 
+/* Ensure consistent image container size */
 .cart-image-section {
   width: 30%;
   min-width: 200px;
   max-width: 250px;
   background-color: #f9f9f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
+/* Uniform image scaling */
 .cart-horizontal-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  border-right: 1px solid #eee;
 }
 
+/* Remaining details section */
 .cart-details-section {
   width: 70%;
   padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 576px) {
+  .cart-horizontal-card {
+    flex-direction: column;
+    height: auto;
+    max-height: none;
+  }
+
+  .cart-image-section {
+    width: 100% !important;
+    height: 200px;
+    border-right: none;
+    border-bottom: 1px solid #eee;
+  }
+
+  .cart-horizontal-img {
+    border-right: none;
+  }
+
+  .cart-details-section {
+    width: 100% !important;
+    padding: 1rem;
+  }
+
+  .cart-button-group {
+    flex-wrap: wrap;
+    margin-top: 0.5rem;
+  }
+}
+
+/* Wrap control for button section */
+.cart-button-group {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
 }
