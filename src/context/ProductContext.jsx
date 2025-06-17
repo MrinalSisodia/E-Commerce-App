@@ -4,8 +4,8 @@ const ProductContext = createContext();
 export const useProductContext = () => useContext(ProductContext);
 
 export const ProductProvider = ({ children }) => {
-  const [products, setProducts] = useState([]); // raw from backend (category-based)
-  const [allProducts, setAllProducts] = useState([]); // all products from backend
+  const [products, setProducts] = useState([]); 
+  const [allProducts, setAllProducts] = useState([]); 
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [categoryLoading, setCategoryLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -76,9 +76,9 @@ export const ProductProvider = ({ children }) => {
     const query = searchQuery.trim();
 
     if (triggerSearch && query) {
+       setCategory(null);
       fetchSearchResults(query);
-      setTriggerSearch(false); // reset search trigger
-      return;
+      setTriggerSearch(false); 
     }
 
     let filtered = [...products];
@@ -115,6 +115,8 @@ export const ProductProvider = ({ children }) => {
         category,
         setCategory,
         products,
+        allProducts,
+        fetchAllProducts,
         filteredProducts,
         categoryLoading,
         error,

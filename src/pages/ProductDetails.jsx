@@ -1,20 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useProductContext } from "../context/ProductContext";
 import { useCartContext } from "../context/CartContext";
 import { useWishlistContext } from "../context/WishlistContext";
 
 const ProductDetail = () => {
   const { productId } = useParams();
-  const { filteredProducts } = useProductContext();
   const { addToCart, isInCart } = useCartContext();
-  const {isInWishlist, toggleWishlist} = useWishlistContext();
+  const { isInWishlist, toggleWishlist } = useWishlistContext();
 
-  const product = filteredProducts?.find((p) => p._id === productId);
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  if (!product) return <p className="container mt-4">Product not found</p>;
+  // ✅ Fetch the product from backend using productId
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(
+          `https://major-project-1-theta.vercel.app/products/${productId}`
+        );
+        const data = await res.json();
+        if (!res.ok || !data.product) throw new Error("Product not found");
+        setProduct(data.product);
+      } catch (err) {
+        console.error("Error fetching product:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
+
+  if (loading) return <p className="container mt-4">Loading product...</p>;
+  if (error || !product) return <p className="container mt-4">Product not found.</p>;
 
   const inCart = isInCart(product._id);
+  const inWishlist = isInWishlist(product._id);
 
   return (
     <div className="container mt-4">
@@ -36,16 +59,13 @@ const ProductDetail = () => {
           <p>{product.description}</p>
 
           <button
-            className={`btn mt-3 ${isInWishlist(product._id) ? "btn-secondary" : "btn-primary"}`}
-            onClick={() => {
-              toggleWishlist(product);
-            }}
-            disabled={isInWishlist(product._id)}
+            className={`btn mt-3 ${inWishlist ? "btn-secondary" : "btn-primary"}`}
+            onClick={() => toggleWishlist(product)}
+            disabled={inWishlist}
           >
-            {isInWishlist(product._id) ? "In Wishlist" : "Add to Wishlist"}
+            {inWishlist ? "In Wishlist" : "Add to Wishlist"}
           </button>
           <br />
-
           <button
             className={`btn mt-3 ${inCart ? "btn-secondary" : "btn-primary"}`}
             onClick={() => addToCart(product)}
