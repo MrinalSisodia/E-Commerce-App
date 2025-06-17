@@ -21,7 +21,7 @@ export const ProductProvider = ({ children }) => {
 
   const fetchAllProducts = async () => {
     try {
-      const res = await fetch("https://major-project-1-theta.vercel.app/products/all");
+      const res = await fetch("https://major-project-1-theta.vercel.app/products");
       const data = await res.json();
       if (!res.ok || !data.products) throw new Error(data.error || "Failed to fetch products.");
       setAllProducts(data.products);
