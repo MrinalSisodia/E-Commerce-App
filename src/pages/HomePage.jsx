@@ -25,10 +25,10 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="container-fluid py-4">
-      <h2 className="mb-4">
-        Pick what you need from a wide range of products in the given categories!
-      </h2>
+    <div className="container-fluid py-3">
+     <h3 className="mb-4 bg-warning-subtle p-3 rounded shadow-sm text-uppercase text-center">
+  Shop By Category
+</h3>
 
       <div className="row g-4">
         {categories.map((cat, index) => (
@@ -36,7 +36,7 @@ export default function HomePage() {
             <Link to={`/products/by-category/${cat.title}`} >
               <div className="card bg-dark text-white border-0">
                 <img
-                  src={`${cat.img}?auto=compress&cs=tinysrgb&w=600&h=400&dpr=1`}
+                  src={`${cat.img}?auto=compress&cs=tinysrgb&w=550&h=320&dpr=1`}
                   className="card-img"
                   alt={cat.title}
                   style={{ height: "250px", objectFit: "cover" }}

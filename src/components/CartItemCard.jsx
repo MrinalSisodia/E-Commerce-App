@@ -7,18 +7,26 @@ const CartItemCard = ({ item }) => {
   const { isInWishlist, toggleWishlist } = useWishlistContext();
 
   return (
-    <div className="cart-horizontal-card">
+    <div className="cart-horizontal-card shadow-sm">
       <div className="cart-image-section">
-        <img
-          src={item.imageUrl}
-          alt={item.name}
-          className="cart-horizontal-img"
-        />
+    
+        <Link to={`/products/${item._id}`}>
+          <img
+            src={item.imageUrl}
+            alt={item.name}
+            className="cart-horizontal-img"
+          />
+        </Link>
       </div>
 
       <div className="cart-details-section d-flex flex-column justify-content-between">
         <div>
-          <h5 className="fw-semibold">{item.name}</h5>
+     
+          <h5 className="fw-semibold">
+            <Link to={`/products/${item._id}`} className="text-decoration-none text-dark">
+              {item.name}
+            </Link>
+          </h5>
           <p className="text-muted mb-2">${item.price}</p>
         </div>
 
@@ -57,15 +65,8 @@ const CartItemCard = ({ item }) => {
             className="btn btn-sm btn-outline-danger"
             onClick={() => removeFromCart(item._id)}
           >
-            Remove
+            Remove from Cart
           </button>
-
-          <Link
-            to={`/products/${item._id}`}
-            className="btn btn-sm btn-outline-info"
-          >
-            View Details
-          </Link>
         </div>
       </div>
     </div>

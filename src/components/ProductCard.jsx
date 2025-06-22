@@ -1,13 +1,13 @@
 import { Link } from "react-router-dom";
 import { useCartContext } from "../context/CartContext";
 import { useWishlistContext } from "../context/WishlistContext";
+import { AddToCartButton } from "./ProductActions";
 
-const ProductCard = ({ product, renderActions, variant = "grid" }) => {
+const ProductCard = ({ product, renderActions}) => {
   const { addToCart, isInCart } = useCartContext();
   const { wishlist, toggleWishlist } = useWishlistContext();
 
   const isInWishlist = wishlist.some((item) => item._id === product._id);
-  const isCart = variant === "cart";
 
   return (
     <div className={`card product-card position-relative shadow-sm`}>
@@ -27,15 +27,7 @@ const ProductCard = ({ product, renderActions, variant = "grid" }) => {
       </button>
 
    
-      {isCart ? (
-        <div className="text-center">
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="cart-card-img"
-          />
-        </div>
-      ) : (
+      
         <div className="product-card-img-wrapper">
           <Link to={`/products/${product._id}`}>
             <img
@@ -45,30 +37,26 @@ const ProductCard = ({ product, renderActions, variant = "grid" }) => {
             />
           </Link>
         </div>
-      )}
 
 
-      <div className={`card-body d-flex flex-column justify-content-between ${isCart ? "cart-card-body" : ""}`}>
+      <div className={`card-body d-flex flex-column justify-content-between`}>
         <div>
-          <h6 className="card-title text-truncate fw-semibold">{product.name}</h6>
-          <p className="card-text fw-bold">${product.price} <br />   ⭐ {product.rating}</p>
-    
-        </div>
+  <h6 className="card-title text-truncate fs-5 fw-semibold">{product.name}</h6>
+  <p className="card-text fw-bold fs-6">
+    ${product.price} <br />
+    <i className="bi bi-star-fill text-warning"></i> {product.rating}
+  </p>
+</div>
 
         <div className="mt-auto">
           {renderActions ? (
             renderActions()
           ) : (
-            <button
-              className="btn btn-primary w-100"
-              onClick={(e) => {
-                e.preventDefault();
-                addToCart(product);
-              }}
-              disabled={isInCart(product._id)}
-            >
-              {isInCart(product._id) ? "Added to Cart" : "Add to Cart"}
-            </button>
+              <AddToCartButton
+    product={product}
+    addToCart={addToCart}
+    isInCart={isInCart}
+  />
           )}
         </div>
       </div>

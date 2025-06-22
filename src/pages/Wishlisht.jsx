@@ -1,6 +1,8 @@
 import { useWishlistContext } from "../context/WishlistContext";
 import { useCartContext } from "../context/CartContext";
 import ProductCard from "../components/ProductCard";
+import { RemoveFromWishlistButton } from "../components/ProductActions";
+import { AddToCartButton } from "../components/ProductActions";
 
 const Wishlist = () => {
   const { wishlist, toggleWishlist } = useWishlistContext();
@@ -16,28 +18,18 @@ const Wishlist = () => {
               <ProductCard
                 product={item}
                 renderActions={() => (
-                  <div className="d-flex flex-column gap-2 mt-2">
-                    <button
-                      className="btn btn-sm btn-outline-danger"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        toggleWishlist(item);
-                      }}
-                    >
-                      Remove from Wishlist
-                    </button>
-                    <button
-                      className="btn btn-sm btn-primary"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        addToCart(item);
-                      }}
-                      disabled={isInCart(item._id)}
-                    >
-                      {isInCart(item._id) ? "Added to Cart" : "Add to Cart"}
-                    </button>
-                  </div>
-                )}
+  <div className="d-flex gap-2 mt-2">
+    <RemoveFromWishlistButton
+      product={item}
+      toggleWishlist={toggleWishlist}
+    />
+    <AddToCartButton
+      product={item}
+      addToCart={addToCart}
+      isInCart={isInCart}
+    />
+  </div>
+)}
               />
             </div>
           ))}

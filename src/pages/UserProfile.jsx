@@ -1,149 +1,167 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useAddressContext } from "../context/AddressContext";
 import { useOrderContext } from "../context/OrderContext";
+import { useLocation } from "react-router-dom";
+import AddressForm from "../components/AddressForm";
+import Modal from "../components/Modal";
 
-const addressFields = [
-  { name: "name", type: "text", placeholder: "Full Name" },
-  { name: "street", type: "text", placeholder: "Street Address" },
-  { name: "city", type: "text", placeholder: "City" },
-  { name: "state", type: "text", placeholder: "State" },
-  { name: "zip", type: "number", placeholder: "ZIP Code" }
-];
-
-const getEmptyAddress = () =>
-  Object.fromEntries(addressFields.map(({ name }) => [name, ""]));
 
 const UserProfile = () => {
   const {
     addresses,
-    addAddress,
     deleteAddress,
-    updateAddress
+    selectedAddressId,
+    setSelectedAddressId,
   } = useAddressContext();
+
   const { orders } = useOrderContext();
+  const location = useLocation();
 
-  const [newAddress, setNewAddress] = useState(getEmptyAddress);
-  const [editingId, setEditingId] = useState(null);
-  const [editedAddress, setEditedAddress] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modalMode, setModalMode] = useState("add"); // 'add' or 'edit'
+  const [editData, setEditData] = useState(null);
 
-const handleAddAddress = () => {
-  const isValid = addressFields.every(({ name }) => newAddress[name].trim() !== "");
-
-  const zipRegex = /^\d{6}$/;
-  if (!zipRegex.test(newAddress.zip)) {
-    alert("Please enter a valid 6-digit ZIP code.");
-    return;
-  }
-
-  if (!isValid) {
-    alert("Please fill all fields.");
-    return;
-  }
-
-  const success = addAddress({ ...newAddress });
-  if (success) {
-    setNewAddress(getEmptyAddress()); 
-  }
-};
-
-  const startEditing = (address) => {
-    setEditingId(address.id);
-    setEditedAddress({ ...address });
+  const openAddModal = () => {
+    setModalMode("add");
+    setEditData(null);
+    setShowModal(true);
   };
 
-  const handleSaveEdit = () => {
-    const isValid = addressFields.every(({ name }) => editedAddress[name]?.trim() !== "");
-
-    const zipRegex = /^\d{6}$/;
-    if (!zipRegex.test(editedAddress.zip)) {
-      alert("Please enter a valid 6-digit ZIP code.");
-      return;
-    }
-
-    if (isValid) {
-      updateAddress(editingId, editedAddress);
-      setEditingId(null);
-      setEditedAddress(null);
-    } else {
-      alert("Please fill all fields");
-    }
+  const openEditModal = (address) => {
+    setModalMode("edit");
+    setEditData(address);
+    setShowModal(true);
   };
 
-  const renderAddressInputs = (addressState, setAddressState) =>
-    addressFields.map(({ name, type, placeholder }) => (
-      <input
-        key={name}
-        type={type}
-        placeholder={placeholder}
-        className="form-control mb-1"
-        value={addressState[name]}
-        onChange={(e) =>
-          setAddressState({ ...addressState, [name]: e.target.value })
-        }
-      />
-    ));
+  useEffect(() => {
+    if (location.hash === "#order-section") {
+      const el = document.getElementById("order-section");
+      if (el) el.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [location]);
 
   return (
     <div className="container mt-4">
       <h2>User Profile</h2>
 
-      <div className="card p-3 mb-4">
+      <div className="card p-3 mb-4 mt-4">
         <p><strong>Name:</strong> John Doe</p>
         <p><strong>Email:</strong> johndoe@example.com</p>
         <p><strong>Phone:</strong> 123-456-7890</p>
       </div>
 
-      <h4>Add a New Address</h4>
-      <div className="mb-3">
-        {renderAddressInputs(newAddress, setNewAddress)}
-        <button className="btn btn-success" onClick={handleAddAddress}>Add Address</button>
-      </div>
+      <section id="my-addresses">
+        <div className="d-flex justify-content-between align-items-center mb-2">
+          <h4>My Addresses</h4>
+          <button className="btn btn-outline-primary btn-sm" onClick={openAddModal}>
+            + Add New Address
+          </button>
+        </div>
 
-      <h4 className="mt-4">Saved Addresses</h4>
-      {addresses.length > 0 ? addresses.map((address) => (
-        <div key={address.id} className="card p-2 mb-2">
-          {editingId === address.id ? (
-            <>
-              {renderAddressInputs(editedAddress, setEditedAddress)}
-              <button className="btn btn-sm btn-outline-success me-2" onClick={handleSaveEdit}>Save</button>
-              <button className="btn btn-sm btn-outline-secondary" onClick={() => setEditingId(null)}>Cancel</button>
-            </>
-          ) : (
-            <>
-              <p>{address.name}, {address.street}, {address.city}, {address.state} - {address.zip}</p>
-              <div className="d-flex flex-wrap gap-2 mt-2">
-                <button
-                  className="btn btn-md btn-outline-danger me-2"
-                  onClick={() => deleteAddress(address.id)}
-                >
-                  Delete
-                </button>
-                <button
-                  className="btn btn-md btn-outline-primary"
-                  onClick={() => startEditing(address)}
-                >
-                  Update
-                </button>
+        <div className="address-list">
+          {addresses.length > 0 ? (
+            addresses.map((address) => (
+              <div
+                key={address.id}
+                className={`card p-3 address-card ${
+                  selectedAddressId === address.id ? "selected" : ""
+                }`}
+              >
+                <p className="mb-1">
+                  {address.name}, {address.street}, {address.city}, {address.state} - {address.zip}
+                </p>
+                <div className="d-flex flex-wrap gap-2 mt-2">
+                  <button
+                    className="btn btn-outline-primary btn-sm"
+                    onClick={() => openEditModal(address)}
+                  >
+                    Update
+                  </button>
+                  <button
+                    className="btn btn-outline-danger btn-sm"
+                    onClick={() => deleteAddress(address.id)}
+                  >
+                    Delete
+                  </button>
+                  <button
+                    className={`btn btn-sm ${
+                      selectedAddressId === address.id
+                        ? "btn-secondary"
+                        : "btn-outline-secondary"
+                    }`}
+                    onClick={() => setSelectedAddressId(address.id)}
+                  >
+                    {selectedAddressId === address.id ? "Default address" : "Set as Default"}
+                  </button>
+                </div>
               </div>
-            </>
+            ))
+          ) : (
+            <p>No address saved.</p>
           )}
         </div>
-      )) : <p>No address saved.</p>}
+      </section>
 
-      <h4 className="mt-4">Order History</h4>
-      {orders?.length > 0 ? orders.map((order, i) => (
-        <div key={i} className="card p-2 mb-2">
-          <h6>Order #{i + 1}</h6>
-          <ul>
-            {order.items.map((item, j) => (
-              <li key={j}>
-                {item.name} × {item.quantity} - ${(item.price * item.quantity).toFixed(2)}
-              </li>
-            ))}
-          </ul>
-          <p><strong>Total:</strong> ${order.total.toFixed(2)}</p>
-        </div>
-      )) : <p>No past orders.</p>}
+      <section id="order-section" className="mt-5">
+        <h4>Order History</h4>
+        {orders?.length > 0 ? (
+          [...orders]
+            .slice(-10)
+            .reverse()
+            .map((order, i) => (
+              <div key={order.id} className="card p-3 mb-4 shadow-sm">
+                <div className="d-flex justify-content-between align-items-center mb-2">
+                  <h6 className="mb-0">Order #{orders.length - i}</h6>
+                  <small className="text-muted">
+                    {new Date(order.date).toLocaleDateString()}
+                  </small>
+                </div>
+
+                <ul className="list-group list-group-flush mb-3">
+                  {order.items.map((item, j) => (
+                    <li
+                      key={j}
+                      className="list-group-item px-0 py-1 d-flex justify-content-between"
+                    >
+                      <span>
+                        {item.name} × {item.quantity}
+                      </span>
+                      <span className="fw-medium">
+                        ${(item.price * item.quantity).toFixed(2)}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mb-2">
+                  <strong>Total:</strong> ${order.total.toFixed(2)}
+                </div>
+
+                {order.address && (
+                  <small className="text-muted">
+                    <strong>Delivered to:</strong> {order.address.name}, {order.address.street},{" "}
+                    {order.address.city}, {order.address.state} – {order.address.zip}
+                  </small>
+                )}
+              </div>
+            ))
+        ) : (
+          <p>No past orders.</p>
+        )}
+      </section>
+
+      {showModal && (
+        <Modal
+          title={modalMode === "edit" ? "Edit Address" : "Add New Address"}
+          onClose={() => setShowModal(false)}
+        >
+          <AddressForm
+            mode={modalMode}
+            initialValues={editData}
+            onClose={() => setShowModal(false)}
+          />
+        </Modal>
+      )}
     </div>
   );
 };

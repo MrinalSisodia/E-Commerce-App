@@ -2,7 +2,7 @@
 
 
 ## Address Context
-### Sets initial state & updates to local staorage
+### Sets initial state & updates to local storage
 ```jsx
 const [addresses, setAddresses] = useState(() => {
     const stored = localStorage.getItem("addresses");
@@ -17,9 +17,10 @@ const [addresses, setAddresses] = useState(() => {
 ### Provides functions for add, update & delete Address
 ```jsx
   const addAddress = (address) => {
-    const newAddress = { ...address, id: Date.now().toString() };
-    setAddresses((prev) => [...prev, newAddress]);
-  };
+  const newAddress = { ...address, id: Date.now().toString() };
+  setAddresses((prev) => [...prev, newAddress]);
+  return true; 
+};
 
   const updateAddress = (id, updatedAddress) => {
   setAddresses((prev) =>
@@ -31,8 +32,10 @@ const [addresses, setAddresses] = useState(() => {
 
   const deleteAddress = (id) => {
     setAddresses((prev) => prev.filter((addr) => addr.id !== id));
+    toast.info("Address deleted");
     if (selectedAddressId === id) setSelectedAddressId(null);
-  }
+    
+  };
 ```
 
 ### Sets Selected Id state to be used for updating & checkout page address selection 

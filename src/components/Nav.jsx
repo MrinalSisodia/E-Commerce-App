@@ -28,43 +28,54 @@ const handleSearchClick = () => {
   }, [location.pathname, setSearchQuery]);
 
   return (
-    <nav className="navbar navbar-expand-lg bg-light px-3">
-      <div className="container-fluid">
-        <Link className="navbar-brand" to="/">
-          MyShoppingWebsite
-        </Link>
+    <nav className="navbar navbar-expand-lg bg-warning-subtle px-3">
+  <div className="container-fluid">
+    <Link className="navbar-brand fs-3 fst-italic fw-bold" to="/">
+      E-Commerce
+    </Link>
 
-        <div className="mx-auto" style={{ width: "25%" }}>
-          <div className="input-group">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Search"
-              value={searchQuery}
-              onChange={handleInputChange}
-            />
-            <button
-              className="btn btn-outline-secondary"
-              type="button"
-              onClick={handleSearchClick}
-            >
-              <i className="bi bi-search"></i>
-            </button>
-          </div>
-        </div>
-
-        <div className="d-flex align-items-center gap-3 ms-auto">
-          <Link to="/wishlist" className="text-dark text-decoration-none">
-            <i className="bi bi-heart fs-5"></i>
-          </Link>
-          <Link to="/cart" className="text-dark text-decoration-none">
-            <i className="bi bi-cart fs-5"></i>
-          </Link>
-          <Link to="/user-profile" className="text-dark text-decoration-none">
-            <i className="bi bi-person fs-5"></i>
-          </Link>
-        </div>
+    <div className="mx-auto" style={{ width: "25%" }}>
+      <div className="input-group">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Search for products"
+          value={searchQuery}
+          onChange={handleInputChange}
+        />
+        <button
+          className="btn btn-outline-secondary"
+          type="button"
+          onClick={handleSearchClick}
+        >
+          <i className="bi bi-search"></i>
+        </button>
       </div>
-    </nav>
+    </div>
+
+    <div className="d-flex align-items-end gap-4 ms-auto">
+      <Link to="/wishlist" className="text-dark text-decoration-none text-center">
+        <div>
+          <i className="bi bi-heart fs-5"></i> <br />
+          <small>Wishlist</small>
+        </div>
+      </Link>
+
+      <Link to="/cart" className="text-dark text-decoration-none text-center">
+        <div>
+          <i className="bi bi-cart fs-5"></i> <br />
+          <small>Cart</small>
+        </div>
+      </Link>
+
+      <Link to="/user-profile" className="text-dark text-decoration-none text-center">
+        <div>
+          <i className="bi bi-person fs-5"></i> <br />
+          <small>Profile</small>
+        </div>
+      </Link>
+    </div>
+  </div>
+</nav>
   );
 }

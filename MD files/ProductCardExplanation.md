@@ -1,9 +1,7 @@
 
 # ProductCard Component – Code Explanation
-
-For rendering individual product cards in the UI. It supports both **grid view** and **cart view** using the `variant` prop
 ```jsx
-const ProductCard = ({ product, renderActions, variant = "grid" }) => {}
+const ProductCard = ({ product, renderActions}) => {}
 const isCart = variant === "cart";
 ```
 ---
@@ -23,44 +21,47 @@ const { wishlist, toggleWishlist } = useWishlistContext();
 ## Wishlist Button
 
 ```jsx
-<button onClick={(e) => { e.preventDefault(); toggleWishlist(product); }}>
-  <i className={isInWishlist ? "bi-heart-fill text-danger" : "bi-heart"} />
-</button>
+<button
+        className="btn position-absolute top-0 end-0 m-2"
+        onClick={(e) => {
+          e.preventDefault();
+          toggleWishlist(product);
+        }}
+        style={{ zIndex: 2 }}
+      >
+        <i
+          className={`bi ${isInWishlist ? "bi-heart-fill text-danger" : "bi-heart"}`}
+          style={{ fontSize: "1.5rem" }}
+        ></i>
+      </button>
 ```
 
 ---
 
-## Product Image
+## Product Image Display
 
 ```jsx
-<div
-        className={isCart ? "" : "d-flex justify-content-center"}
-        style={isCart ? {} : { height: "250px", overflow: "hidden" }}
-      >
-        <img
-          src={product.imageUrl}
-          alt={product.name}
-          className={isCart ? "cart-card-img" : "w-100"}
-          style={isCart ? {} : { objectFit: "cover", height: "100%" }}
-        />
-      </div>
+<div className="product-card-img-wrapper">
+          <Link to={`/products/${product._id}`}>
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="product-card-img"
+            />
+          </Link>
+        </div>
 ```
-
-- Uses conditional styling based on the `variant` prop:
-  - `grid`: Constrained height (250px) and object-fit cover.
-  - `cart`: Uses `cart-card-img` class.
 
 ---
 
 ## Card Body
 
 ```jsx
-  <div
-        className={`card-body ${isCart ? "cart-card-body" : "d-flex flex-column justify-content-between"}`}
-      >
+  <div className={`card-body d-flex flex-column justify-content-between`}>
         <div>
-          <h6 className="card-title text-truncate">{product.name}</h6>
-          <p className="card-text fw-semibold">${product.price}</p>
+          <h6 className="card-title text-truncate fw-semibold">{product.name}</h6>
+          <p className="card-text fw-bold">${product.price} <br />   ⭐ {product.rating}</p>
+    
         </div>
 ```
 
@@ -69,40 +70,23 @@ const { wishlist, toggleWishlist } = useWishlistContext();
 ### Add to Cart Button
 
 ```jsx
-<button
-  onClick={(e) => {
-    e.preventDefault();
-    addToCart(product);
-  }}
-  disabled={isInCart(product._id)}
->
-  {isInCart(product._id) ? "Added to Cart" : "Add to Cart"}
-</button>
+<div className="mt-auto">
+          {renderActions ? (
+            renderActions()
+          ) : (
+            <button
+              className="btn btn-primary w-100"
+              onClick={(e) => {
+                e.preventDefault();
+                addToCart(product);
+              }}
+              disabled={isInCart(product._id)}
+            >
+              {isInCart(product._id) ? "Added to Cart" : "Add to Cart"}
+            </button>
+          )}
+        </div>
 ```
----
-
-## Custom Actions with `renderActions`
-
-```jsx
-{renderActions ? renderActions() : <DefaultButton />}
-```
-
-- If `renderActions` is provided, it overrides the default "Add to Cart" button.
-- Used in `Cart.jsx` to show quantity controls, move to wishlist, remove from cart.
-
----
-
-## Link Wrapper
-
-```jsx
-<Link to={`/products/${product._id}`} className="...">
-  {CardInner}
-</Link>
-```
-
-- Entire card is wrapped in a `Link` to the product details page.
-- Prevents navigation when inner buttons are clicked using `e.preventDefault()`.
-
----
+- Custom Action buttons are passdewith `renderActions` prop for using in wishlist page
 
 ---

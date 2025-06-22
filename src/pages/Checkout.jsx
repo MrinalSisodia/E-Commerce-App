@@ -1,74 +1,104 @@
 import { useCartContext } from "../context/CartContext";
 import { useAddressContext } from "../context/AddressContext";
-import { useOrderContext } from "../context/OrderContext"; 
+import { useOrderContext } from "../context/OrderContext";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Checkout = () => {
-  const { cart, clearCart } = useCartContext(); 
-  const { addresses, selectedAddressId, setSelectedAddressId } = useAddressContext();
-  const { placeOrder } = useOrderContext(); 
+  const { cart, clearCart } = useCartContext();
+  const { addresses, selectedAddressId } = useAddressContext();
+  const { placeOrder } = useOrderContext();
   const [orderPlaced, setOrderPlaced] = useState(false);
+  const navigate = useNavigate();
 
   const totalPrice = cart
     .reduce((acc, item) => acc + item.price * item.quantity, 0)
     .toFixed(2);
 
-  const selectedAddress = addresses.find((addr) => addr.id === selectedAddressId);
+  const selectedAddress = addresses.find(
+    (addr) => addr.id === selectedAddressId
+  );
 
   const handlePlaceOrder = () => {
     if (!selectedAddress || cart.length === 0) return;
-
-    placeOrder(cart, selectedAddress); 
-    clearCart(); 
+    placeOrder(cart, selectedAddress);
+    clearCart();
     setOrderPlaced(true);
   };
 
   return (
     <div className="container mt-4">
       <h2 className="mb-4">Checkout</h2>
+
       {!orderPlaced ? (
         <>
-          <h5>Select Delivery Address:</h5>
-          {addresses.length > 0 ? (
-            addresses.map((addr) => (
-              <div className="form-check" key={addr.id}>
-                <input
-                  className="form-check-input"
-                  type="radio"
-                  name="address"
-                  id={addr.id}
-                  checked={selectedAddressId === addr.id}
-                  onChange={() => setSelectedAddressId(addr.id)}
-                />
-                <label className="form-check-label" htmlFor={addr.id}>
-                  {addr.name}, {addr.street}, {addr.city}, {addr.state} - {addr.zip}
-                </label>
-              </div>
-            ))
+          {selectedAddress ? (
+            <div className="card p-3 mb-4 shadow-sm">
+              <h5 className="mb-2">Delivery Address:</h5>
+              <p className="mb-0">
+                <strong>{selectedAddress.name}</strong><br />
+                {selectedAddress.street}, {selectedAddress.city},<br />
+                {selectedAddress.state} - {selectedAddress.zip}
+              </p>
+            </div>
           ) : (
-            <p className="text-muted">No address available. Please add one from your profile.</p>
+            <div className="alert alert-warning">
+              No address selected. Please go to your cart and choose one.
+            </div>
           )}
 
-          <h5 className="mt-5">Order Summary</h5>
-          <ul className="list-group mb-3">
-            {cart?.map((item) => (
-              <li key={item._id} className="list-group-item">
-                {item.name} x ({item.quantity}) = ₹{(item.price * item.quantity).toFixed(2)}
+          <div className="card p-3 mb-4 shadow-sm">
+            <h5 className="mb-3">Order Summary</h5>
+            <ul className="list-group mb-3">
+              {cart?.map((item) => (
+                <li key={item._id} className="list-group-item d-flex justify-content-between">
+                  <div>
+                    {item.name} × {item.quantity}
+                  </div>
+                  <div>${(item.price * item.quantity).toFixed(2)}</div>
+                </li>
+              ))}
+              <li className="list-group-item fw-bold d-flex justify-content-between">
+                <span>Total:</span>
+                <span>${totalPrice}</span>
               </li>
-            ))}
-            <li className="list-group-item fw-bold">Total: ₹{totalPrice}</li>
-          </ul>
+            </ul>
 
-          <button
-            className="btn btn-success"
-            onClick={handlePlaceOrder}
-            disabled={!selectedAddressId}
-          >
-            Place Order
-          </button>
+            <div className="d-flex flex-column flex-sm-row gap-2">
+              <button
+                className="btn btn-outline-secondary w-100"
+                onClick={() => navigate("/cart")}
+              >
+                ← Back to Cart
+              </button>
+              <button
+                className="btn btn-success w-100"
+                onClick={handlePlaceOrder}
+                disabled={!selectedAddressId}
+              >
+                Place Order
+              </button>
+            </div>
+          </div>
         </>
       ) : (
-        <div className="alert alert-success">Order Placed Successfully!</div>
+        <div className="text-center">
+          <div className="alert alert-success">Order Placed Successfully!</div>
+          <div className="d-flex flex-column flex-sm-row justify-content-center gap-3 mt-3">
+            <button
+              className="btn btn-outline-info"
+              onClick={() => navigate("/user-profile#order-section")}
+            >
+              View Orders
+            </button>
+            <button
+              className="btn btn-outline-info"
+              onClick={() => navigate("/")}
+            >
+              Continue Shopping
+            </button>
+          </div>
+        </div>
       )}
     </div>
   );
