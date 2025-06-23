@@ -50,7 +50,7 @@ const UserProfile = () => {
         <p><strong>Phone:</strong> 123-456-7890</p>
       </div>
 
-      <section id="my-addresses">
+      <section id="my-addresses" className="py-3">
         <div className="d-flex justify-content-between align-items-center mb-2">
           <h4>My Addresses</h4>
           <button className="btn btn-outline-primary btn-sm" onClick={openAddModal}>
